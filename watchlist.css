@@ -1,0 +1,62 @@
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #121212;
+    height: 100vh;
+}
+
+#header::before {
+    content: "";
+    background: #2E2E2F url("images/background-cropped.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: .20;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+#header {
+    position: relative;
+    height: 200px;
+    width: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#header a, h1 {
+    padding: 1em;
+    color: #FFFFFF;
+    text-decoration: none;
+    z-index: 1;
+}
+
+#list-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    color: #787878;
+    padding: 5em;
+}
+
+#list-placeholder a{
+    display: block;
+    color: #FFFFFF;
+    background: #121212;
+    border: none;
+    text-decoration: none;
+}
+
+#list-placeholder i {
+    background: #FFFFFF;
+    color: #121212;
+    border-radius: 50%;
+}
