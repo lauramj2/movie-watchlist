@@ -88,3 +88,23 @@ body {
     margin: auto;
     padding: 5em;
 }
+
+.movie-card {
+    display: flex;
+    color: white;
+}
+
+.inner-div {
+    display: flex;
+    flex-direction: column;
+}
+
+.movie-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.movie-title {
+    display: flex;
+    justify-content: space-around;
+}
