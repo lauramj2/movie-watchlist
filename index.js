@@ -9,7 +9,7 @@ moviePlaceholder.innerHTML = `<i class="fa-solid fa-film"></i>
 
 
 // Event listener on search form
-document.getElementById("search-form").addEventListener("submit", function(e){
+document.getElementById("search-form").addEventListener("submit", (e) => {
     e.preventDefault()
     //clear previous search
     movieList.innerHTML = ""
@@ -21,22 +21,22 @@ async function searchMovies(){
     //get search input
     const searchInput = document.getElementById("search").value
 
+    //fetch data from API
     const res = await fetch(`http://www.omdbapi.com/?apikey=c44b8d58&?&s=${searchInput}`)
     const data = await res.json()
 
-    //call render function with fetched data
+    //call render function with fetched data and save to local storage
     if (data.Response === "True"){
-        // console.log(data.Search)
+        const localMovies = localStorage.setItem("movies", JSON.stringify(data.Search))
         renderMovies(data.Search)
-        // localStorage.setItem("movies", JSON.stringify(data.Search))
     } else {
         moviePlaceholder.innerHTML = `<p>Unable to find what you are looking for.</p>`
     }
 }
 
-function renderMovies(searchArr){
-    moviePlaceholder.remove()
-    searchArr.forEach(async movie => {
+async function renderMovies(searchArr){
+    moviePlaceholder.style.display = "none"
+    for (const movie of searchArr){
         const movieContainer = document.createElement("div")
         movieContainer.id = "movie-container"
         movieContainer.innerHTML = `
@@ -44,35 +44,33 @@ function renderMovies(searchArr){
                                         <img class="movie-img" src="${movie.Poster}">
                                         <div class="inner-div">
                                             <div class="movie-title">
-                                                <h2>${movie.Title}<h2>
+                                                <h2>${movie.Title}</h2>
                                                 <i class="star"></i>
-                                                <p id="movie-rating"></p>
+                                                <p class="movie-rating"></p>
                                             </div>
                                             <div class="movie-info">
-                                                <p id="runtime"></p>
-                                                <p id="genre"></p>
-                                                <button id="add-btn"><i class="fa-solid fa-plus"></i>Watchlist</button>
+                                                <p class="runtime"></p>
+                                                <p class="genre"></p>
+                                                <button class="add-btn"><i class="fa-solid fa-plus"></i>Watchlist</button>
                                             </div>
-                                            <p id="plot"></p>
+                                            <p class="plot"></p>
                                         </div>
                                     </div>
-                                    `
-        
-        const addButton = movieContainer.querySelector("#add-btn")
+                                    `                   
+        const addButton = movieContainer.querySelector(".add-btn")
 
-        addButton.addEventListener("click", function(){
+        addButton.addEventListener("click", () => {
             if (!watchlist.includes(`${movie.imdbID}`)){
                 watchlist.push(`${movie.imdbID}`)
-                localStorage.setItem("movies", JSON.stringify(watchlist))
-                console.log(watchlist)
+                const localList = localStorage.setItem("moviesWatch", JSON.stringify(watchlist))
+                // console.log(watchlist)
             } 
         })
-        
 
-        const movieRating = movieContainer.querySelector("#movie-rating")
-        const movieRuntime = movieContainer.querySelector("#runtime")
-        const movieGenre = movieContainer.querySelector("#genre")
-        const moviePlot = movieContainer.querySelector("#plot")
+        const movieRating = movieContainer.querySelector(".movie-rating")
+        const movieRuntime = movieContainer.querySelector(".runtime")
+        const movieGenre = movieContainer.querySelector(".genre")
+        const moviePlot = movieContainer.querySelector(".plot")
        
         const resId = await fetch(`http://www.omdbapi.com/?apikey=c44b8d58&?&i=${movie.imdbID}`)
         const dataId = await resId.json()
@@ -83,10 +81,31 @@ function renderMovies(searchArr){
             movieGenre.textContent = dataId.Genre
             moviePlot.textContent = dataId.Plot
         }
+
+        //deal with error images
+        const movieImg = movieContainer.querySelector(".movie-img")
+        movieImg.onerror = () => {
+            movieImg.src = "images/not-found.jpg"
+        }
+        movieImg.src = (movie.Poster && movie.Poster !== "N/A") 
+            ? movie.Poster 
+            : "images/not-found.jpg"
     
-        movieList.appendChild(movieContainer)                                             
-    })
+        movieList.appendChild(movieContainer)
+    }
 }
+
+
+
+// // Preserve search on page reload
+// document.addEventListener("DOMContentLoaded", () => {
+//     renderMovies(JSON.parse(localStorage.getItem("movies")))
+// })
+
+
+
+
+
 
 // const moviesStored = JSON.parse(localStorage.getItem("movies"))
 
@@ -98,24 +117,3 @@ function renderMovies(searchArr){
 
 
 
-
-
-// let moviesArray = []
-    // const options = {
-    //                 method: "GET",
-    //                 headers: {
-    //                     "Content-Type": "application/json"
-    //                     }
-    //                 }
-    // const url = "http://www.omdbapi.com/?apikey=c44b8d58&?s=" + searchInput
-
-    // console.log(url)
-    // fetch(url, options)
-
-
-
-     // console.log("hello")
-    // console.log(typeof movieRender.split(" "))
-    // renderSearch(moviesHTML)
-    // console.log("hello")
-    // return renderSearch(movieRender.split(" "))
