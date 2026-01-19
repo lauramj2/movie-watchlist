@@ -47,7 +47,7 @@ body {
     padding: 5em;
 }
 
-#list-placeholder a{
+#list-placeholder a {
     display: block;
     color: #FFFFFF;
     background: #121212;
@@ -61,22 +61,57 @@ body {
     border-radius: 50%;
 }
 
+#list-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+    width: auto;
+}
+
 .movie-card {
     display: flex;
-    color: white;
+    color: #A5A5A5;
+    width: 80%;
+    margin: 0 100px;
+    padding: 50px;
 }
 
 .inner-div {
     display: flex;
     flex-direction: column;
+    padding: 30px;
 }
 
 .movie-info {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+    color: #FFFFFF;
+    font-size: .9em;
 }
 
 .movie-title {
     display: flex;
-    justify-content: space-around;
+    font-size: 1.2em;
+    color: #FFFFFF;
+}
+
+.star, .movie-rating {
+    padding-top: 25px;
+    margin: 0 0 10px 10px;
+}
+
+.run-time, .genre, .remove-tbn {
+    padding: 0 40px;
+}
+
+.plot {
+    font-size: 1em;
+}
+
+hr {
+    margin: 10px 150px;
+    border: 1.5px solid #E5E7EB;
+    width: 80%;
 }

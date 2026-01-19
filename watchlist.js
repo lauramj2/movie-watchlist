@@ -13,12 +13,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const storedList = JSON.parse(localStorage.getItem("moviesWatch")) || []
 
     if (storedList.length > 0){
-        console.log(typeof storedList)
-        console.log(storedList)
         listPlaceholder.style.display = "none"
         watchlist = [...storedList]
-        // console.log(typeof storedList)
-        // renderList(JSON.parse(storedList))
         renderList(watchlist)
     }
     if (storedList.length === 0){
@@ -36,8 +32,8 @@ async function renderList(list){
                                     <img class="movie-img" src="${movie.Poster}">
                                     <div class="inner-div">
                                         <div class="movie-title">
-                                            <h2>${movie.Title}</h2>
-                                            <i class="star"></i>
+                                            <h2 class="title">${movie.Title}</h2>
+                                            <i class="fa-solid fa-star star"></i>
                                             <p class="movie-rating"></p>
                                         </div>
                                         <div class="movie-info">
@@ -48,34 +44,49 @@ async function renderList(list){
                                         <p class="plot"></p>
                                     </div>
                                 </div>
+                                <hr></hr>
                                 `
 
         const movieRating = container.querySelector(".movie-rating")
         const movieRuntime = container.querySelector(".runtime")
         const movieGenre = container.querySelector(".genre")
         const moviePlot = container.querySelector(".plot")
+        const movieTitle = container.querySelector(".title")
+        const movieImg = container.querySelector(".movie-img")
        
         try {
-            const resId = await fetch(`http://www.omdbapi.com/?apikey=c44b8d58&?&i=${movie.imdbID}`)
+            const resId = await fetch(`http://www.omdbapi.com/?apikey=c44b8d58&?&i=${movie}`)
             const dataId = await resId.json()
             if (dataId.Response === "True"){
                 movieRating.textContent = dataId.imdbRating
                 movieRuntime.textContent = dataId.Runtime
                 movieGenre.textContent = dataId.Genre
                 moviePlot.textContent = dataId.Plot
+                movieTitle.textContent = dataId.Title
+                movieImg.src = dataId.Poster
+                // console.log(dataId)
             }
         } catch(err){
             console.error("Error fetching movie details:", err)
         }
 
         //deal with error images
-        const movieImg = container.querySelector(".movie-img")
-        movieImg.onerror = () => {
-            movieImg.src = "images/not-found.jpg"
-        }
-        movieImg.src = (movie.Poster && movie.Poster !== "N/A") 
-            ? movie.Poster 
-            : "images/not-found.jpg"
+
+        // if (movie.Poster && movie.Poster !== "N/A") {
+        //     movieImg.src = movie.Poster
+        // } 
+        // else {
+        //     movieImg.src = "images/not-found.jpg"
+        // }
+
+
+        // movieImg.onerror = () => {
+        //     movieImg.src = "images/not-found.jpg"
+        // }
+
+        // movieImg.src = (movie.Poster && movie.Poster !== "N/A") 
+        // ? movie.Poster 
+        // : "images/not-found.jpg"
 
         listContainer.appendChild(container)  
         

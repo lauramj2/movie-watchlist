@@ -5,20 +5,21 @@ let watchlist = []
 
 // Add default placeholder where movies will go 
 moviePlaceholder.innerHTML = `<i class="fa-solid fa-film"></i>
-                                <p>Start Exploring</p>`
+                            <p>Start Exploring</p>`
 
 
 // Event listener on search form
 document.getElementById("search-form").addEventListener("submit", (e) => {
     e.preventDefault()
     //clear previous search
-    movieList.innerHTML = ""
+    
     searchMovies()
 }) 
 
 // Search by movie title
 async function searchMovies(){
     //get search input
+    movieList.innerHTML = ""
     const searchInput = document.getElementById("search").value
 
     //fetch data from API
@@ -30,7 +31,7 @@ async function searchMovies(){
         const localMovies = localStorage.setItem("movies", JSON.stringify(data.Search))
         renderMovies(data.Search)
     } else {
-        moviePlaceholder.innerHTML = `<p>Unable to find what you are looking for.</p>`
+        moviePlaceholder.innerHTML = `<p class="searchErrMsg">Unable to find what you're looking for. Please try another search.</p>`
     }
 }
 
@@ -45,7 +46,7 @@ async function renderMovies(searchArr){
                                         <div class="inner-div">
                                             <div class="movie-title">
                                                 <h2>${movie.Title}</h2>
-                                                <i class="star"></i>
+                                                <i class="fa-solid fa-star star"></i>
                                                 <p class="movie-rating"></p>
                                             </div>
                                             <div class="movie-info">
@@ -56,14 +57,15 @@ async function renderMovies(searchArr){
                                             <p class="plot"></p>
                                         </div>
                                     </div>
+                                    <hr></hr>
                                     `                   
         const addButton = movieContainer.querySelector(".add-btn")
 
         addButton.addEventListener("click", () => {
-            if (!watchlist.includes(`${movie.imdbID}`)){
-                watchlist.push(`${movie.imdbID}`)
-                const localList = localStorage.setItem("moviesWatch", JSON.stringify(watchlist))
-                // console.log(watchlist)
+            const storedList = JSON.parse(localStorage.getItem("moviesWatch")) || []
+            if (!storedList.includes(`${movie.imdbID}`)){
+                storedList.push(`${movie.imdbID}`)
+                localStorage.setItem("moviesWatch", JSON.stringify(storedList))
             } 
         })
 
@@ -97,10 +99,10 @@ async function renderMovies(searchArr){
 
 
 
-// // Preserve search on page reload
-// document.addEventListener("DOMContentLoaded", () => {
-//     renderMovies(JSON.parse(localStorage.getItem("movies")))
-// })
+// Preserve search on page reload
+document.addEventListener("DOMContentLoaded", () => {
+    renderMovies(JSON.parse(localStorage.getItem("movies")))
+})
 
 
 
